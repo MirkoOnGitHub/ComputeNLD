@@ -388,6 +388,8 @@ def calcNLD(rawData,
                         monteCarloData[i] = random.normal(data[i,1],data[i,2],iterations)
                 if spectrumType == 'incidence':
                     monteCarloData[i] = random.poisson(data[i,1],iterations)
+            if data[i,1] < 0:
+                data[i,1] = 0
         
         monteCarloData = transpose(monteCarloData)
         monteCarloNLDRaw = zeros([iterations+1,len(boundaries)])
