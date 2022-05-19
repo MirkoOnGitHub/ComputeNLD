@@ -390,6 +390,9 @@ def calcNLD(rawData,
                     monteCarloData[i] = random.poisson(data[i,1],iterations)
             if data[i,1] < 0:
                 data[i,1] = 0
+                
+        if any(data[:,1] < 0):                
+            print('Warning: Negative spectrum entries will be set to 0. Only non-negative entries are accepted.')
         
         monteCarloData = transpose(monteCarloData)
         monteCarloNLDRaw = zeros([iterations+1,len(boundaries)])
