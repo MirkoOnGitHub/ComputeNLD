@@ -332,8 +332,15 @@ def calcDelta(e, monteCarloNLD, confidence, method, spectrumType):
     confInt = zeros([len(e),2])
 
     for i in range(len(e)):
-        #The most common value is selected from the results of the Monte Carlo Simulation
+        #The most common value(s) is/are selected from the results of the Monte Carlo Simulation
         modes = multimode(round(monteCarloNLD[:,i],-1))
+        
+        #If there are several equally common values, the bin width is increased until there is exactly one bin with the most common (rounded) value.
+        j = 1
+        while len(modes) > 1 and j < 1000:
+            modes = multimode(round(monteCarloNLD[:,i]/(2*j),-1)*2*j)
+            j+=1       
+        
         nld[i] = modes[floor(len(modes)/2)]
         if spectrumType == 'crosssection':
             confInt[i] = norm.interval(alpha=confidence,loc=nld[i], scale=monteCarloNLD[:,i].std())
